@@ -8,5 +8,7 @@ class Tarea:
     id: Optional[int]
     titulo: str
     descripcion: str = ""
-    completada: bool = False
+    prioridad: str = "Media"
+    estado: str = "Pendiente"
+    fecha_limite: Optional[str] = None
     fecha_creacion: Optional[datetime] = None

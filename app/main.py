@@ -7,9 +7,9 @@ servicio_tareas = ServicioTareas()
 
 def mostrar_encabezado() -> None:
     print()
-    print("=" * 50)
-    print("              GESTOR DE TAREAS")
-    print("=" * 50)
+    print("=" * 60)
+    print("                  GESTOR DE TAREAS")
+    print("=" * 60)
 
 
 def mostrar_menu() -> None:
@@ -17,10 +17,68 @@ def mostrar_menu() -> None:
     print("1. Crear tarea")
     print("2. Ver tareas")
     print("3. Editar tarea")
-    print("4. Completar / reabrir tarea")
+    print("4. Cambiar estado")
     print("5. Eliminar tarea")
     print("6. Salir")
     print()
+
+
+def seleccionar_prioridad(
+    prioridad_actual: str = "Media",
+) -> str:
+
+    print("\nPrioridad:")
+    print("1. Baja")
+    print("2. Media")
+    print("3. Alta")
+    print("4. Urgente")
+
+    opcion = input(
+        f"Seleccione prioridad [{prioridad_actual}]: "
+    ).strip()
+
+    prioridades = {
+        "1": "Baja",
+        "2": "Media",
+        "3": "Alta",
+        "4": "Urgente",
+    }
+
+    if not opcion:
+        return prioridad_actual
+
+    return prioridades.get(
+        opcion,
+        prioridad_actual,
+    )
+
+
+def seleccionar_estado(
+    estado_actual: str = "Pendiente",
+) -> str:
+
+    print("\nEstado:")
+    print("1. Pendiente")
+    print("2. En progreso")
+    print("3. Completada")
+
+    opcion = input(
+        f"Seleccione estado [{estado_actual}]: "
+    ).strip()
+
+    estados = {
+        "1": "Pendiente",
+        "2": "En progreso",
+        "3": "Completada",
+    }
+
+    if not opcion:
+        return estado_actual
+
+    return estados.get(
+        opcion,
+        estado_actual,
+    )
 
 
 def crear_tarea() -> None:
@@ -29,14 +87,24 @@ def crear_tarea() -> None:
     titulo = input("Título: ")
     descripcion = input("Descripción: ")
 
+    prioridad = seleccionar_prioridad()
+
+    fecha_limite = input(
+        "Fecha límite (AAAA-MM-DD, opcional): "
+    ).strip()
+
     try:
         tarea = servicio_tareas.crear_tarea(
             titulo=titulo,
             descripcion=descripcion,
+            prioridad=prioridad,
+            estado="Pendiente",
+            fecha_limite=fecha_limite,
         )
 
         print(
-            f"\nTarea #{tarea.id} creada correctamente."
+            f"\nTarea #{tarea.id} "
+            "creada correctamente."
         )
 
     except ValueError as error:
@@ -54,11 +122,25 @@ def mostrar_tareas() -> None:
 
     for tarea in tareas:
 
-        estado = "✓" if tarea.completada else "○"
+        if tarea.estado == "Completada":
+            simbolo = "✓"
+        elif tarea.estado == "En progreso":
+            simbolo = "→"
+        else:
+            simbolo = "○"
+
+        print()
+        print(
+            f"{simbolo} [{tarea.id}] "
+            f"{tarea.titulo}"
+        )
 
         print(
-            f"{estado} [{tarea.id}] "
-            f"{tarea.titulo}"
+            f"    Estado: {tarea.estado}"
+        )
+
+        print(
+            f"    Prioridad: {tarea.prioridad}"
         )
 
         if tarea.descripcion:
@@ -67,13 +149,23 @@ def mostrar_tareas() -> None:
                 f"{tarea.descripcion}"
             )
 
+        if tarea.fecha_limite:
+            print(
+                f"    Fecha límite: "
+                f"{tarea.fecha_limite}"
+            )
+
+    print()
+
 
 def editar_tarea() -> None:
     mostrar_tareas()
 
     try:
         id_tarea = int(
-            input("\nID de la tarea que desea editar: ")
+            input(
+                "ID de la tarea que desea editar: "
+            )
         )
 
     except ValueError:
@@ -105,17 +197,40 @@ def editar_tarea() -> None:
     if not descripcion:
         descripcion = tarea.descripcion
 
+    prioridad = seleccionar_prioridad(
+        tarea.prioridad
+    )
+
+    estado = seleccionar_estado(
+        tarea.estado
+    )
+
+    fecha_limite = input(
+        f"Fecha límite "
+        f"[{tarea.fecha_limite or 'Sin fecha'}]: "
+    ).strip()
+
+    if not fecha_limite:
+        fecha_limite = tarea.fecha_limite
+
     try:
         actualizada = servicio_tareas.actualizar_tarea(
             id_tarea=id_tarea,
             titulo=titulo,
             descripcion=descripcion,
+            prioridad=prioridad,
+            estado=estado,
+            fecha_limite=fecha_limite,
         )
 
         if actualizada:
-            print("Tarea actualizada correctamente.")
+            print(
+                "Tarea actualizada correctamente."
+            )
         else:
-            print("No se pudo actualizar la tarea.")
+            print(
+                "No se pudo actualizar la tarea."
+            )
 
     except ValueError as error:
         print(f"Error: {error}")
@@ -127,8 +242,7 @@ def cambiar_estado_tarea() -> None:
     try:
         id_tarea = int(
             input(
-                "\nID de la tarea que desea "
-                "completar o reabrir: "
+                "ID de la tarea que desea modificar: "
             )
         )
 
@@ -142,18 +256,26 @@ def cambiar_estado_tarea() -> None:
         print("No se encontró la tarea.")
         return
 
-    if servicio_tareas.cambiar_estado(id_tarea):
+    nuevo_estado = seleccionar_estado(
+        tarea.estado
+    )
 
-        if tarea.completada:
-            print("La tarea ha sido reabierta.")
+    try:
+        if servicio_tareas.cambiar_estado(
+            id_tarea,
+            nuevo_estado,
+        ):
+            print(
+                f"Estado actualizado a "
+                f'"{nuevo_estado}".'
+            )
         else:
-            print("La tarea ha sido completada.")
+            print(
+                "No se pudo actualizar el estado."
+            )
 
-    else:
-        print(
-            "No se pudo cambiar el estado "
-            "de la tarea."
-        )
+    except ValueError as error:
+        print(f"Error: {error}")
 
 
 def eliminar_tarea() -> None:
@@ -162,7 +284,7 @@ def eliminar_tarea() -> None:
     try:
         id_tarea = int(
             input(
-                "\nID de la tarea que desea eliminar: "
+                "ID de la tarea que desea eliminar: "
             )
         )
 
@@ -177,7 +299,8 @@ def eliminar_tarea() -> None:
         return
 
     confirmacion = input(
-        f'¿Desea eliminar "{tarea.titulo}"? (s/n): '
+        f'¿Desea eliminar "{tarea.titulo}"? '
+        "(s/n): "
     ).strip().lower()
 
     if confirmacion != "s":
