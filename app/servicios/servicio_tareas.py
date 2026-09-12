@@ -511,3 +511,116 @@ class ServicioTareas:
             fecha_limite=fila["fecha_limite"],
             fecha_creacion=fila["fecha_creacion"],
         )
+    def obtener_tareas_filtradas(
+        self,
+        estado: Optional[str] = None,
+        prioridad: Optional[str] = None,
+        categoria: Optional[str] = None,
+        texto: Optional[str] = None,
+        pagina: int = 1,
+        limite: int = 10,
+    ) -> tuple[list[Tarea], int]:
+
+        condiciones = []
+        parametros = []
+
+        if estado:
+            self.validar_estado(estado)
+
+            condiciones.append(
+                "estado = ?"
+            )
+            parametros.append(estado)
+
+        if prioridad:
+            self.validar_prioridad(prioridad)
+
+            condiciones.append(
+                "prioridad = ?"
+            )
+            parametros.append(prioridad)
+
+        if categoria:
+            condiciones.append(
+                "categoria LIKE ?"
+            )
+            parametros.append(
+                f"%{categoria.strip()}%"
+            )
+
+        if texto:
+            condiciones.append(
+                """
+                (
+                    titulo LIKE ?
+                    OR descripcion LIKE ?
+                    OR categoria LIKE ?
+                )
+                """
+            )
+
+            patron = f"%{texto.strip()}%"
+
+            parametros.extend(
+                [
+                    patron,
+                    patron,
+                    patron,
+                ]
+            )
+
+        where = ""
+
+        if condiciones:
+            where = (
+                "WHERE "
+                + " AND ".join(condiciones)
+            )
+
+        offset = (
+            pagina - 1
+        ) * limite
+
+        with obtener_conexion(
+            self.ruta_base_datos
+        ) as conexion:
+
+            total = conexion.execute(
+                f"""
+                SELECT COUNT(*) AS total
+                FROM tareas
+                {where}
+                """,
+                parametros,
+            ).fetchone()["total"]
+
+            filas = conexion.execute(
+                f"""
+                SELECT
+                    id,
+                    titulo,
+                    descripcion,
+                    prioridad,
+                    estado,
+                    categoria,
+                    fecha_limite,
+                    fecha_creacion
+                FROM tareas
+                {where}
+                ORDER BY id DESC
+                LIMIT ?
+                OFFSET ?
+                """,
+                [
+                    *parametros,
+                    limite,
+                    offset,
+                ],
+            ).fetchall()
+
+        tareas = [
+            self.convertir_fila_a_tarea(fila)
+            for fila in filas
+        ]
+
+        return tareas, total

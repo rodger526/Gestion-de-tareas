@@ -1,2 +1,4 @@
-# La versión actual utiliza únicamente módulos
-# incluidos en la biblioteca estándar de Python.
+fastapi
+uvicorn
+pytest
+httpx
