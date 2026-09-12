@@ -1,0 +1,476 @@
+:root {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  color: #e8edf5;
+  background: #0b1120;
+
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #0b1120;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  background: #101827;
+  color: #e8edf5;
+  border: 1px solid #273248;
+  border-radius: 10px;
+  padding: 12px 14px;
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #6366f1;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.pantalla-centro {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
+.loader {
+  width: 42px;
+  height: 42px;
+  margin: auto;
+  border: 4px solid #273248;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: giro 0.8s linear infinite;
+}
+
+@keyframes giro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.auth-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 520px;
+}
+
+.auth-presentacion {
+  padding: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      #312e81,
+      transparent 35%
+    ),
+    #0b1120;
+}
+
+.auth-presentacion h1 {
+  font-size: clamp(
+    40px,
+    5vw,
+    72px
+  );
+  line-height: 1.05;
+  margin: 24px 0;
+  max-width: 900px;
+}
+
+.auth-presentacion p {
+  color: #9ca8bb;
+  max-width: 600px;
+  font-size: 18px;
+}
+
+.logo-grande,
+.logo {
+  color: #818cf8;
+  font-weight: 800;
+}
+
+.auth-panel {
+  background: #101827;
+  display: grid;
+  place-items: center;
+  padding: 40px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  display: grid;
+  gap: 16px;
+}
+
+.auth-card h2 {
+  margin-bottom: 0;
+  font-size: 32px;
+}
+
+.texto-secundario {
+  color: #8c98aa;
+}
+
+.boton {
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-weight: 600;
+}
+
+.principal {
+  background: #6366f1;
+  color: white;
+}
+
+.principal:hover {
+  background: #5558e6;
+}
+
+.secundario {
+  background: #1d2738;
+  color: #dce3ee;
+  border: 1px solid #303c51;
+}
+
+.texto {
+  background: transparent;
+  color: #818cf8;
+}
+
+.error {
+  padding: 12px 14px;
+  background: #3b1217;
+  border: 1px solid #78242f;
+  color: #ffadb8;
+  border-radius: 10px;
+}
+
+.app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 245px 1fr;
+}
+
+.sidebar {
+  background: #0d1422;
+  border-right: 1px solid #1e293b;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.usuario-sidebar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 35px 0;
+}
+
+.usuario-sidebar strong,
+.usuario-sidebar small {
+  display: block;
+}
+
+.usuario-sidebar small {
+  color: #78869a;
+  margin-top: 4px;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  background: #6366f1;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.sidebar nav {
+  display: grid;
+  gap: 6px;
+}
+
+.sidebar nav button,
+.cerrar {
+  text-align: left;
+  padding: 12px;
+  color: #8e9aab;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+}
+
+.sidebar nav button:hover,
+.sidebar .nav-activo {
+  color: #fff;
+  background: #172033;
+}
+
+.cerrar {
+  color: #f87171;
+}
+
+.contenido {
+  padding: 35px;
+  overflow: hidden;
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.saludo {
+  color: #8e9aab;
+  margin: 0;
+}
+
+.cabecera h1 {
+  margin-top: 5px;
+}
+
+.estadisticas {
+  display: grid;
+  grid-template-columns:
+    repeat(5, 1fr);
+  gap: 15px;
+  margin: 30px 0;
+}
+
+.stat {
+  background: #111a2a;
+  border: 1px solid #202c40;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.stat span {
+  color: #8995a8;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.stat strong {
+  font-size: 30px;
+}
+
+.grid-principal {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    350px;
+  gap: 20px;
+}
+
+.panel {
+  background: #111a2a;
+  border: 1px solid #202c40;
+  border-radius: 16px;
+  padding: 22px;
+}
+
+.panel h2 {
+  margin-top: 0;
+}
+
+.filtros {
+  display: grid;
+  grid-template-columns:
+    1fr 170px 170px auto;
+  gap: 10px;
+  margin: 25px 0;
+}
+
+.lista-tareas {
+  display: grid;
+  gap: 10px;
+}
+
+.tarea {
+  border: 1px solid #273248;
+  background: #0e1726;
+  border-radius: 13px;
+  padding: 17px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.tarea h3 {
+  margin: 8px 0;
+}
+
+.tarea p {
+  color: #8e9aab;
+}
+
+.tarea small {
+  color: #68778c;
+}
+
+.badges {
+  display: flex;
+  gap: 7px;
+}
+
+.badge {
+  padding: 4px 9px;
+  border-radius: 20px;
+  background: #1f2937;
+  font-size: 12px;
+}
+
+.badge.urgente {
+  background: #4b1820;
+  color: #fca5a5;
+}
+
+.badge.alta {
+  background: #49301c;
+  color: #fdba74;
+}
+
+.badge.media {
+  background: #263853;
+  color: #93c5fd;
+}
+
+.badge.baja {
+  background: #18382e;
+  color: #86efac;
+}
+
+.badge.estado {
+  color: #c4b5fd;
+}
+
+.acciones {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.acciones button {
+  background: #1b2638;
+  color: #cbd5e1;
+  border: 1px solid #2d3a50;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+.acciones .peligro {
+  color: #fda4af;
+}
+
+.form-tarea {
+  display: grid;
+  gap: 15px;
+}
+
+.form-tarea label {
+  display: grid;
+  gap: 7px;
+  color: #aab4c3;
+  font-size: 14px;
+}
+
+.sin-datos {
+  color: #768399;
+  text-align: center;
+  padding: 50px;
+}
+
+@media (
+  max-width: 1100px
+) {
+  .estadisticas {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .grid-principal {
+    grid-template-columns: 1fr;
+  }
+
+  .filtros {
+    grid-template-columns:
+      1fr 1fr;
+  }
+}
+
+@media (
+  max-width: 760px
+) {
+  .auth-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-presentacion {
+    display: none;
+  }
+
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .contenido {
+    padding: 18px;
+  }
+
+  .estadisticas {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .filtros {
+    grid-template-columns: 1fr;
+  }
+
+  .tarea {
+    flex-direction: column;
+  }
+}

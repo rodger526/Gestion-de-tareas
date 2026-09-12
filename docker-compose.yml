@@ -1,0 +1,68 @@
+services:
+
+  db:
+    image: postgres:17
+    container_name: gestor_postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: gestor
+      POSTGRES_PASSWORD: gestor
+      POSTGRES_DB: gestor
+
+    volumes:
+      - gestor_postgres_data:/var/lib/postgresql/data
+
+    ports:
+      - "5432:5432"
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U gestor -d gestor"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+
+  backend:
+    build:
+      context: ./backend
+
+    container_name: gestor_backend
+
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    ports:
+      - "8000:8000"
+
+
+  frontend:
+    build:
+      context: ./frontend
+
+      args:
+        VITE_API_URL: http://localhost:8000
+
+    container_name: gestor_frontend
+
+    restart: unless-stopped
+
+    depends_on:
+      - backend
+
+    ports:
+      - "5173:80"
+
+
+volumes:
+  gestor_postgres_data:
