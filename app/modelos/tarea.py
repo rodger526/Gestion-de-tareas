@@ -10,5 +10,6 @@ class Tarea:
     descripcion: str = ""
     prioridad: str = "Media"
     estado: str = "Pendiente"
+    categoria: str = "General"
     fecha_limite: Optional[str] = None
     fecha_creacion: Optional[datetime] = None

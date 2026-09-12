@@ -2,34 +2,50 @@
 
 Aplicación de gestión de tareas desarrollada en Python.
 
-Este proyecto comenzó como un programa sencillo ejecutado desde
-consola y está siendo reconstruido progresivamente con una
-arquitectura más completa.
+El proyecto comenzó como un programa básico ejecutado desde consola
+y está evolucionando progresivamente hacia una aplicación full stack.
 
-## Estado
+## Estado del proyecto
 
-🚧 Proyecto en desarrollo.
+🚧 En desarrollo
 
-## Versión actual
+Actualmente se encuentra en la versión V3.
 
-La versión actual incluye:
+## Funcionalidades
 
-- Creación de tareas
-- Visualización de tareas
-- Edición de tareas
-- Eliminación de tareas
-- Tareas pendientes y completadas
+- Crear tareas
+- Listar tareas
+- Editar tareas
+- Eliminar tareas
+- Cambiar estado de una tarea
+- Prioridades
+  - Baja
+  - Media
+  - Alta
+  - Urgente
+- Estados
+  - Pendiente
+  - En progreso
+  - Completada
+- Categorías
+- Fechas límite
+- Búsqueda de tareas
+- Filtro por estado
+- Filtro por prioridad
+- Detección de tareas vencidas
+- Ordenamiento por fecha límite
 - Persistencia mediante SQLite
-- Arquitectura modular
 
-## Tecnologías
+## Arquitectura
 
-- Python
-- SQLite
+El proyecto está dividido en diferentes capas:
 
-## Ejecutar el proyecto
-
-Desde la raíz del repositorio:
-
-```bash
-python -m app.main
+```text
+app/
+├── base_datos/
+│   └── conexion.py
+├── modelos/
+│   └── tarea.py
+├── servicios/
+│   └── servicio_tareas.py
+└── main.py
